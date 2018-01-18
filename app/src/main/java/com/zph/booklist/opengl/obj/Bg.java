@@ -5,8 +5,10 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.zph.booklist.R;
+import com.zph.booklist.opengl.util.BufferUtil;
 import com.zph.booklist.opengl.util.Config;
 import com.zph.booklist.opengl.util.TextResourceReader;
+import com.zph.booklist.opengl.util.TriangleUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -39,32 +41,33 @@ public class Bg {
     private static final int STRIDE = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * BYTES_PER_FLOAT;
     private int aColorLocation;
 
+//    private float tableVertexDate[] = {
+//            0f, 0f, 0f, 1f,     1.0f, 1.0f, 0.6f,
+//            -1f, -1f, 0f, 1f,   0.3f, 0.7f, 0.7f,
+//            1f, -1f, 0f, 1f,    0.7f, 0.1f, 0.7f,
+//
+//            //triangle2
+//            1f, 1f, 0f, 1f,     0.7f, 0.2f, 0.7f,
+//            -1f, 1f, 0f, 1f,    0.3f, 0.75f, 0.7f,
+//            -1f, -1f, 0f, 1f,   0.3f, 0.7f, 0.2f,
+//    };
+
     private float tableVertexDate[] = {
-            0f, 0f, 0f, 1.5f, 1.0f, 1.0f, 1.0f,
-            -0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-            0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-            //triangle2
-            0.5f, 0.8f, 0f, 2f, 0.7f, 0.7f, 0.7f,
-            -0.5f, 0.8f, 0f, 2f, 0.7f, 0.7f, 0.7f,
-            -0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-
-            //line
-            -0.5f, 0f, 0f, 1.5f, 1f, 0f, 0f,
-            0.5f, 0f, 0f, 1.5f, 1f, 0f, 0f,
-            //point
-            0f, -0.4f, 0f, 1.25f, 0f, 0f, 1f,
-            0f, 0.4f, 0f, 1.75f, 1f, 0f, 0f,
-
-
     };
 
+
+    private FloatBuffer valueBuffer;
+    private FloatBuffer colorBuffer;
     public Bg(Context context) {
         this.mContext = context;
-        this.initVar();
-        this.initParame();
+//        this.initVar();
+//        this.initParame();
     }
 
     private void initVar() {
+        tableVertexDate= TriangleUtils.GetRandomTriangle();
+
+
         vertexBuffer = ByteBuffer
                 .allocateDirect(tableVertexDate.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder())
@@ -73,6 +76,8 @@ public class Bg {
         vertexBuffer.put(tableVertexDate);
         // 设置buffer，从第一个坐标开始读
         vertexBuffer.position(0);
+
+
     }
 
     private void initParame() {
@@ -90,16 +95,16 @@ public class Bg {
         // 不加的话真机不会出现绘制内容，
         // 模拟器会出现颜色uColorLocation不正常，出现布局叠加，默认白色
         GLES20.glUseProgram(program);
-        Log.i("TAG", "program" + program);
+//        Log.i("TAG", "program" + program);
         //获取Uniform位置(Color)返回-1代表错误，0是有效值
 //        uColorLocation= GLES20.glGetUniformLocation(program, U_COLOR);
 //        获取颜色位置(Color)返回-1代表错误，0是有效值
         //接受要注意a_Color接受的是varying类型
         aColorLocation = GLES20.glGetAttribLocation(program, A_COLOR);
-        Log.i("TAG", "aColorLocation" + aColorLocation);
+//        Log.i("TAG", "aColorLocation" + aColorLocation);
         //获取属性的位置(Position)aPositionLocation返回-1代表错误，0是有效值
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION);
-        Log.i("TAG", "aPositionLocation" + aPositionLocation);
+//        Log.i("TAG", "aPositionLocation" + aPositionLocation);
 
 
         //传入数据 没有跨距的（颜色跨距）
@@ -118,11 +123,9 @@ public class Bg {
         GLES20.glEnableVertexAttribArray(aPositionLocation);
 
     }
-
     public void draw(GL10 gl) {
+        this.initVar();
+        this.initParame();
         gl.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 6);
-        gl.glDrawArrays(GLES20.GL_LINES,6,2);
-        gl.glDrawArrays(GLES20.GL_POINTS,8,1);
-        gl.glDrawArrays(GLES20.GL_POINTS,9,1);
     }
 }

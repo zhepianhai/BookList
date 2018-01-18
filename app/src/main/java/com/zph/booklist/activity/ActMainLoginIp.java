@@ -26,6 +26,7 @@ public class ActMainLoginIp extends AppCompatActivity implements View.OnClickLis
             glv.setEGLContextClientVersion(2); // Pick an OpenGL ES 2.0 context.
             glv.setRenderer(new BgRender(this));
             setContentView(glv);
+            
 //            mViewMain.addView(glv);
 //        } else {
 //            Toast.makeText(this, R.string.not_suppose_opengl, Toast.LENGTH_SHORT).show();
@@ -35,6 +36,7 @@ public class ActMainLoginIp extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
+
     }
 
     @Override

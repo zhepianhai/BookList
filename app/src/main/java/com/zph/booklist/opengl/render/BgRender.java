@@ -56,5 +56,13 @@ public class BgRender implements GLSurfaceView.Renderer{
     public void onDrawFrame(GL10 gl) {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         mBg.draw(gl);
+        //增加时间间隔
+        try {
+            Thread.sleep(800);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
