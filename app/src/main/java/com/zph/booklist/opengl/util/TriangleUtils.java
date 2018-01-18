@@ -31,11 +31,7 @@ public class TriangleUtils {
 
 
 
-    private float GetRandomColor(){
-        float mColor=0.0f;
 
-        return mColor;
-    }
     public static float[] GetRandomTriangle(){
 //        float tableVertexDate[] = {
 //                0  0
